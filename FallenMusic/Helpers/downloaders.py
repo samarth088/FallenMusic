@@ -1,33 +1,15 @@
 # MIT License
 #
 # Copyright (c) 2023 AnonymousX1025
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+
 import os
 from yt_dlp import YoutubeDL
 
-# Cookies file banao
-cookies_content = os.environ.get('COOKIES_CONTENT')
-if cookies_content:
-    with open('/tmp/cookies.txt', 'w') as f:
-        f.write(cookies_content)
+# 👉 Ensure downloads folder exists
+if not os.path.exists("downloads"):
+    os.makedirs("downloads")
 
+# 👉 FINAL yt-dlp config (Render + cookies working)
 ydl_opts = {
     "format": "bestaudio/best",
     "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -36,7 +18,20 @@ ydl_opts = {
     "quiet": True,
     "no_warnings": True,
     "prefer_ffmpeg": True,
-    "cookiefile": "/etc/secrets/cookies.txt",  # ← Sirf Yeh Badla
+
+    # ✅ IMPORTANT: Render secret file path
+    "cookiefile": "/etc/secrets/cookies.txt",
+
+    # ✅ Avoid bot detection
+    "http_headers": {
+        "User-Agent": "Mozilla/5.0",
+        "Referer": "https://www.youtube.com/"
+    },
+
+    # ✅ Playlist issues avoid
+    "noplaylist": True,
+
+    # ✅ Audio convert
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",
@@ -45,13 +40,21 @@ ydl_opts = {
         }
     ],
 }
+
 ydl = YoutubeDL(ydl_opts)
 
 
 def audio_dl(url: str) -> str:
-    sin = ydl.extract_info(url, False)
-    x_file = os.path.join("downloads", f"{sin['id']}.mp3")
-    if os.path.exists(x_file):
-        return x_file
-    ydl.download([url])
-    return x_file
+    try:
+        info = ydl.extract_info(url, download=False)
+        file_path = os.path.join("downloads", f"{info['id']}.mp3")
+
+        if os.path.exists(file_path):
+            return file_path
+
+        ydl.download([url])
+        return file_path
+
+    except Exception as e:
+        print("Download Error:", str(e))
+        return None
