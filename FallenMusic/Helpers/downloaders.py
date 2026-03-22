@@ -36,7 +36,7 @@ ydl_opts = {
     "quiet": True,
     "no_warnings": True,
     "prefer_ffmpeg": True,
-    "cookiefile": "/tmp/cookies.txt",  # ← Yeh add hua
+    "cookiefile": "/etc/secrets/cookies.txt",  # ← Sirf Yeh Badla
     "postprocessors": [
         {
             "key": "FFmpegExtractAudio",
