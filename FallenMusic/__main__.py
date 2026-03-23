@@ -23,6 +23,8 @@
 import asyncio
 import importlib
 import os
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from pyrogram import idle
 
@@ -40,6 +42,20 @@ from FallenMusic import (
     pytgcalls,
 )
 from FallenMusic.Modules import ALL_MODULES
+
+# Dummy HTTP server for Render
+class Handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b'OK')
+    def log_message(self, *args):
+        pass
+
+threading.Thread(
+    target=lambda: HTTPServer(('0.0.0.0', 8080), Handler).serve_forever(),
+    daemon=True
+).start()
 
 
 async def fallen_startup():
