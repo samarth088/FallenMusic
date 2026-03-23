@@ -24,7 +24,6 @@ import asyncio
 import importlib
 import os
 import threading
-import os
 
 cookies_data = os.getenv("COOKIES")
 
