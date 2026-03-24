@@ -25,13 +25,6 @@ import importlib
 import os
 import threading
 
-cookies_data = os.getenv("COOKIES")
-
-if cookies_data:
-    with open("cookies.txt", "w") as f:
-        f.write(cookies_data)
-else:
-    print("❌ COOKIES not found")
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from pyrogram import idle
