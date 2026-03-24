@@ -16,19 +16,27 @@ ydl_opts = {
     "nocheckcertificate": True,
     "geo_bypass": True,
 
-    # 🔥 Anti-bot bypass
+    # 🔥 HARD BYPASS (important)
+    "source_address": "0.0.0.0",
+
+    # 🔥 Strong headers
     "http_headers": {
-        "User-Agent": "com.google.android.youtube/17.31.35 (Linux; U; Android 11)"
+        "User-Agent": "com.google.android.youtube/17.31.35 (Linux; U; Android 11)",
+        "X-YouTube-Client-Name": "3",
+        "X-YouTube-Client-Version": "17.31.35"
     },
 
-    # 🔥 REAL MAGIC (UPDATED)
+    # 🔥 ULTRA extractor bypass
     "extractor_args": {
         "youtube": {
-            "player_client": ["android", "ios"],
+            "player_client": ["android", "ios", "web_embedded"],
             "skip": ["dash", "hls"]
         }
     },
 
+    # 🔥 Extra stability
+    "retries": 5,
+    "fragment_retries": 5,
     "noplaylist": True,
 }
 
