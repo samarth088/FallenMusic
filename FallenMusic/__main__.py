@@ -1,30 +1,11 @@
 # MIT License
 #
 # Copyright (c) 2023 AnonymousX1025
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
 
 import asyncio
 import importlib
 import os
 import threading
-
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from pyrogram import idle
@@ -44,23 +25,8 @@ from FallenMusic import (
 )
 from FallenMusic.Modules import ALL_MODULES
 
-# Dummy HTTP server for Render
-class Handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b'OK')
-    def log_message(self, *args):
-        pass
 
-threading.Thread(
-    target=lambda: HTTPServer(('0.0.0.0', 8080), Handler).serve_forever(),
-    daemon=True
-).start()
-
-import threading
-from http.server import HTTPServer, BaseHTTPRequestHandler
-
+# ✅ SINGLE Dummy HTTP server for Render (FIXED)
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -70,11 +36,14 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         return
 
+
 def run_server():
     server = HTTPServer(("0.0.0.0", 8080), Handler)
     server.serve_forever()
 
+
 threading.Thread(target=run_server, daemon=True).start()
+
 
 async def fallen_startup():
     LOGGER.info("[•] Loading Modules...")
@@ -115,7 +84,7 @@ async def fallen_startup():
     LOGGER.info(f"[•] Assistant Started As {ASS_NAME}.")
 
     LOGGER.info(
-        "[•] \x53\x74\x61\x72\x74\x69\x6e\x67\x20\x50\x79\x54\x67\x43\x61\x6c\x6c\x73\x20\x43\x6c\x69\x65\x6e\x74\x2e\x2e\x2e"
+        "[•] Starting PyTgCalls Client..."
     )
     await pytgcalls.start()
     await idle()
