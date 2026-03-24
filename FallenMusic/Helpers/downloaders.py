@@ -1,10 +1,10 @@
 # MIT License
 # Copyright (c) 2023 AnonymousX1025
 
-
 import os
 from yt_dlp import YoutubeDL
 
+# Ensure downloads folder exists
 if not os.path.exists("downloads"):
     os.makedirs("downloads")
 
@@ -16,18 +16,15 @@ ydl_opts = {
     "nocheckcertificate": True,
     "geo_bypass": True,
 
-    # 🔥 NO COOKIES
-    # "cookiefile": "cookies.txt",  ❌ remove
-
     # 🔥 Anti-bot bypass
     "http_headers": {
         "User-Agent": "com.google.android.youtube/17.31.35 (Linux; U; Android 11)"
     },
 
-    # 🔥 REAL MAGIC
+    # 🔥 REAL MAGIC (UPDATED)
     "extractor_args": {
         "youtube": {
-            "player_client": ["android"],
+            "player_client": ["android", "ios"],
             "skip": ["dash", "hls"]
         }
     },
